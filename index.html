@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON y Base64 Tools</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <header class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold">JSON & Base64 Suite</h1>
+        <p class="text-slate-400">Herramientas locales, rápidas y sin depender de APIs externas.</p>
+      </div>
+      <nav class="flex gap-2">
+        <button id="tab-json" class="rounded-full bg-indigo-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30">JSON</button>
+        <button id="tab-base64" class="rounded-full bg-slate-800 px-5 py-2 text-sm font-semibold text-slate-200">Base64</button>
+      </nav>
+    </header>
+
+    <section id="section-json" class="space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">One-line-to-JSON</h2>
+          <p class="text-sm text-slate-400">Convierte el JSON a una sola línea.</p>
+          <textarea id="json-one-input" class="mt-4 h-32 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder='{"nombre": "Ada"}'></textarea>
+          <button id="json-one-btn" class="mt-4 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold">Convertir</button>
+          <pre id="json-one-output" class="mt-4 whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-sm text-indigo-200"></pre>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">Beautiful JSON</h2>
+          <p class="text-sm text-slate-400">Formatea el JSON con indentación bonita.</p>
+          <textarea id="json-pretty-input" class="mt-4 h-32 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder='{"hola":"mundo"}'></textarea>
+          <button id="json-pretty-btn" class="mt-4 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold">Formatear</button>
+          <pre id="json-pretty-output" class="mt-4 whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-sm text-indigo-200"></pre>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">JSON Escape</h2>
+          <p class="text-sm text-slate-400">Escapa caracteres especiales según las reglas dadas.</p>
+          <textarea id="json-escape-input" class="mt-4 h-32 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder='{"linea": "hola\n"}'></textarea>
+          <button id="json-escape-btn" class="mt-4 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold">Escapar</button>
+          <pre id="json-escape-output" class="mt-4 whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-sm text-indigo-200"></pre>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">JSON Unescape</h2>
+          <p class="text-sm text-slate-400">Deshace el escapado de caracteres.</p>
+          <textarea id="json-unescape-input" class="mt-4 h-32 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="{\"linea\":\"hola\\n\"}"></textarea>
+          <button id="json-unescape-btn" class="mt-4 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold">Desescapar</button>
+          <pre id="json-unescape-output" class="mt-4 whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-sm text-indigo-200"></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-base64" class="hidden space-y-6">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">Base64 to PDF</h2>
+          <p class="text-sm text-slate-400">Pega el Base64 para visualizarlo como PDF.</p>
+          <textarea id="b64-pdf-input" class="mt-4 h-28 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="JVBERi0x..." ></textarea>
+          <button id="b64-pdf-btn" class="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold">Mostrar PDF</button>
+          <iframe id="b64-pdf-preview" class="mt-4 h-56 w-full rounded-xl bg-slate-950" title="PDF preview"></iframe>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">PDF to Base64</h2>
+          <p class="text-sm text-slate-400">Sube un PDF para obtener su Base64.</p>
+          <input id="pdf-b64-input" type="file" accept="application/pdf" class="mt-4 w-full text-sm text-slate-300" />
+          <pre id="pdf-b64-output" class="mt-4 h-40 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-xs text-emerald-200"></pre>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">HTML to Base64</h2>
+          <p class="text-sm text-slate-400">Convierte HTML y muestra su render.</p>
+          <textarea id="html-b64-input" class="mt-4 h-28 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="<h1>Hola</h1>"></textarea>
+          <button id="html-b64-btn" class="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold">Convertir</button>
+          <pre id="html-b64-output" class="mt-4 h-24 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-xs text-emerald-200"></pre>
+          <div id="html-b64-preview" class="mt-4 rounded-xl border border-slate-700 bg-white p-3 text-slate-800"></div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">Base64 to HTML</h2>
+          <p class="text-sm text-slate-400">Pega Base64 y visualiza el HTML.</p>
+          <textarea id="b64-html-input" class="mt-4 h-28 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="PGgxPk..." ></textarea>
+          <button id="b64-html-btn" class="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold">Decodificar</button>
+          <pre id="b64-html-output" class="mt-4 h-24 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-xs text-emerald-200"></pre>
+          <div id="b64-html-preview" class="mt-4 rounded-xl border border-slate-700 bg-white p-3 text-slate-800"></div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">IMG to Base64</h2>
+          <p class="text-sm text-slate-400">Carga una imagen para ver su Base64.</p>
+          <input id="img-b64-input" type="file" accept="image/*" class="mt-4 w-full text-sm text-slate-300" />
+          <pre id="img-b64-output" class="mt-4 h-24 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-xs text-emerald-200"></pre>
+          <img id="img-b64-preview" class="mt-4 max-h-40 rounded-xl border border-slate-700 object-contain" alt="Preview" />
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">Base64 to Image</h2>
+          <p class="text-sm text-slate-400">Pega Base64 y visualiza la imagen.</p>
+          <textarea id="b64-img-input" class="mt-4 h-28 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="iVBORw0KG..." ></textarea>
+          <button id="b64-img-btn" class="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold">Mostrar</button>
+          <img id="b64-img-preview" class="mt-4 max-h-40 rounded-xl border border-slate-700 object-contain" alt="Imagen Base64" />
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">File to Base64</h2>
+          <p class="text-sm text-slate-400">Sube cualquier archivo para obtener Base64.</p>
+          <input id="file-b64-input" type="file" class="mt-4 w-full text-sm text-slate-300" />
+          <pre id="file-b64-output" class="mt-4 h-32 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-950 p-3 text-xs text-emerald-200"></pre>
+        </div>
+
+        <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl">
+          <h2 class="text-xl font-semibold">Base64 to File</h2>
+          <p class="text-sm text-slate-400">Convierte Base64 en archivo descargable.</p>
+          <input id="b64-file-name" class="mt-4 w-full rounded-xl border border-slate-700 bg-slate-950 p-2 text-sm" placeholder="archivo.bin" />
+          <textarea id="b64-file-input" class="mt-4 h-28 w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm" placeholder="AAA..." ></textarea>
+          <button id="b64-file-btn" class="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold">Descargar</button>
+          <p id="b64-file-status" class="mt-3 text-xs text-emerald-200"></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const tabJson = document.getElementById('tab-json');
+    const tabBase64 = document.getElementById('tab-base64');
+    const sectionJson = document.getElementById('section-json');
+    const sectionBase64 = document.getElementById('section-base64');
+
+    const setActiveTab = (target) => {
+      const isJson = target === 'json';
+      sectionJson.classList.toggle('hidden', !isJson);
+      sectionBase64.classList.toggle('hidden', isJson);
+      tabJson.classList.toggle('bg-indigo-500', isJson);
+      tabJson.classList.toggle('bg-slate-800', !isJson);
+      tabBase64.classList.toggle('bg-indigo-500', !isJson);
+      tabBase64.classList.toggle('bg-slate-800', isJson);
+    };
+
+    tabJson.addEventListener('click', () => setActiveTab('json'));
+    tabBase64.addEventListener('click', () => setActiveTab('base64'));
+
+    const safeJsonParse = (value) => {
+      try {
+        return { value: JSON.parse(value), error: null };
+      } catch (error) {
+        return { value: null, error: error.message };
+      }
+    };
+
+    const showError = (target, message) => {
+      target.textContent = message ? `Error: ${message}` : '';
+    };
+
+    document.getElementById('json-one-btn').addEventListener('click', () => {
+      const input = document.getElementById('json-one-input').value.trim();
+      const output = document.getElementById('json-one-output');
+      if (!input) {
+        output.textContent = '';
+        return;
+      }
+      const parsed = safeJsonParse(input);
+      if (parsed.error) {
+        showError(output, parsed.error);
+        return;
+      }
+      output.textContent = JSON.stringify(parsed.value);
+    });
+
+    document.getElementById('json-pretty-btn').addEventListener('click', () => {
+      const input = document.getElementById('json-pretty-input').value.trim();
+      const output = document.getElementById('json-pretty-output');
+      if (!input) {
+        output.textContent = '';
+        return;
+      }
+      const parsed = safeJsonParse(input);
+      if (parsed.error) {
+        showError(output, parsed.error);
+        return;
+      }
+      output.textContent = JSON.stringify(parsed.value, null, 2);
+    });
+
+    const escapeJson = (value) =>
+      value
+        .replace(/\\/g, '\\\\')
+        .replace(/\"/g, '\\"')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t')
+        .replace(/\f/g, '\\f')
+        .replace(/\u0008/g, '\\b');
+
+    const unescapeJson = (value) =>
+      value
+        .replace(/\\b/g, '\b')
+        .replace(/\\f/g, '\f')
+        .replace(/\\n/g, '\n')
+        .replace(/\\r/g, '\r')
+        .replace(/\\t/g, '\t')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\');
+
+    document.getElementById('json-escape-btn').addEventListener('click', () => {
+      const input = document.getElementById('json-escape-input').value;
+      document.getElementById('json-escape-output').textContent = escapeJson(input);
+    });
+
+    document.getElementById('json-unescape-btn').addEventListener('click', () => {
+      const input = document.getElementById('json-unescape-input').value;
+      document.getElementById('json-unescape-output').textContent = unescapeJson(input);
+    });
+
+    const fileToBase64 = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('pdf-b64-input').addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      const output = document.getElementById('pdf-b64-output');
+      if (!file) {
+        output.textContent = '';
+        return;
+      }
+      const dataUrl = await fileToBase64(file);
+      output.textContent = dataUrl.split(',')[1];
+    });
+
+    document.getElementById('b64-pdf-btn').addEventListener('click', () => {
+      const input = document.getElementById('b64-pdf-input').value.trim();
+      const preview = document.getElementById('b64-pdf-preview');
+      if (!input) {
+        preview.removeAttribute('src');
+        return;
+      }
+      preview.src = `data:application/pdf;base64,${input}`;
+    });
+
+    document.getElementById('html-b64-btn').addEventListener('click', () => {
+      const html = document.getElementById('html-b64-input').value;
+      const encoded = btoa(unescape(encodeURIComponent(html)));
+      document.getElementById('html-b64-output').textContent = encoded;
+      document.getElementById('html-b64-preview').innerHTML = html;
+    });
+
+    document.getElementById('b64-html-btn').addEventListener('click', () => {
+      const input = document.getElementById('b64-html-input').value.trim();
+      const output = document.getElementById('b64-html-output');
+      const preview = document.getElementById('b64-html-preview');
+      if (!input) {
+        output.textContent = '';
+        preview.innerHTML = '';
+        return;
+      }
+      try {
+        const decoded = decodeURIComponent(escape(atob(input)));
+        output.textContent = decoded;
+        preview.innerHTML = decoded;
+      } catch (error) {
+        output.textContent = `Error: ${error.message}`;
+      }
+    });
+
+    document.getElementById('img-b64-input').addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      const output = document.getElementById('img-b64-output');
+      const preview = document.getElementById('img-b64-preview');
+      if (!file) {
+        output.textContent = '';
+        preview.removeAttribute('src');
+        return;
+      }
+      const dataUrl = await fileToBase64(file);
+      output.textContent = dataUrl.split(',')[1];
+      preview.src = dataUrl;
+    });
+
+    document.getElementById('b64-img-btn').addEventListener('click', () => {
+      const input = document.getElementById('b64-img-input').value.trim();
+      const preview = document.getElementById('b64-img-preview');
+      if (!input) {
+        preview.removeAttribute('src');
+        return;
+      }
+      preview.src = `data:image/*;base64,${input}`;
+    });
+
+    document.getElementById('file-b64-input').addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      const output = document.getElementById('file-b64-output');
+      if (!file) {
+        output.textContent = '';
+        return;
+      }
+      const dataUrl = await fileToBase64(file);
+      output.textContent = dataUrl.split(',')[1];
+    });
+
+    document.getElementById('b64-file-btn').addEventListener('click', () => {
+      const nameInput = document.getElementById('b64-file-name').value.trim() || 'archivo.bin';
+      const base64 = document.getElementById('b64-file-input').value.trim();
+      const status = document.getElementById('b64-file-status');
+      if (!base64) {
+        status.textContent = 'Ingresa un Base64 válido.';
+        return;
+      }
+      try {
+        const byteChars = atob(base64);
+        const byteNumbers = new Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i += 1) {
+          byteNumbers[i] = byteChars.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray]);
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = nameInput;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        status.textContent = 'Descarga iniciada.';
+      } catch (error) {
+        status.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
